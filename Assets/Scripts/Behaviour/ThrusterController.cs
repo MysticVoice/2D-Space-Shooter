@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ThrusterController : MonoBehaviour
 {
-    public List<Thruster> forwardThrusters;
-    public List<Thruster> sidewaysThrusters;
-    public float rotationForce;
+    public float forwardsThrust = 10;
+    public float sidewaysThrust = 5;
+    public float rotationForce = 1;
     public bool stabilize = false;
 
     private Rigidbody2D rb;
@@ -20,24 +20,14 @@ public class ThrusterController : MonoBehaviour
     public void thrust(float horizontalInput,float verticalInput, float strafeInput)
     {
         Vector3 thrustDirection = Vector3.zero;
-        foreach(Thruster t in forwardThrusters)
-        {
-            thrustDirection += t.calculateThrust(verticalInput);
-        }
-        foreach (Thruster t in sidewaysThrusters)
-        {
-            thrustDirection += t.calculateThrust(strafeInput);
-        }
+        thrustDirection += calculateThrust(verticalInput, transform.up,forwardsThrust);
+        thrustDirection += calculateThrust(strafeInput,transform.right,sidewaysThrust);
         rb.AddForce(thrustDirection);
         rb.AddTorque(-horizontalInput*rotationForce);
-        //transform.Rotate(transform.forward, -horizontalInput * rotationForce);
     }
 
-    public void setThrusterForces(float force)
+    public Vector3 calculateThrust(float input, Vector3 direction, float force)
     {
-        foreach(Thruster t in forwardThrusters)
-        {
-            t.force = force;
-        }
+        return direction * force * input;
     }
 }

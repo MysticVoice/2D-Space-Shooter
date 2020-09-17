@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D),typeof(ThrusterController))]
 public class PlayerController : MonoBehaviour
 {
-    public List<Thruster> thrusters;
     private Rigidbody2D rb;
     private ThrusterController tc;
     public Skill skill;

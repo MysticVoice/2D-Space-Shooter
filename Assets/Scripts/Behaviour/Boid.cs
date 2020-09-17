@@ -6,6 +6,7 @@ public class Boid : MonoBehaviour
 {
     public Target target;
     public List<GameObject> boids;
+    public GameObject spawnObject;
     public float attractionRange = 10;
     public float repulsionRange = 2;
     public float angleLimit = 70;
@@ -14,6 +15,9 @@ public class Boid : MonoBehaviour
     public float alignmentPower = 0.01f;
     public float targetingWeight = 0.2f;
     public float thrusterForce = 2.5f;
+    public float maxTurn = 10;
+
+    private Transform boidsParent;
 
     private float calcRotation;
     private List<ThrusterController> boidThrusters;
@@ -25,8 +29,9 @@ public class Boid : MonoBehaviour
         getComponentReferences();
         foreach(ThrusterController t in boidThrusters)
         {
-            t.setThrusterForces(thrusterForce);
+            t.forwardsThrust = thrusterForce;
         }
+        boidsParent = GameObject.Find("Boids").transform;
     }
     void FixedUpdate()
     {
@@ -54,6 +59,11 @@ public class Boid : MonoBehaviour
                 boidBehaviour(boid,otherBoid);
             }
         }
+        if (target != null)
+        {
+            calcRotation += seek(boid, target.transform) * targetingWeight;
+        }
+        calcRotation = Mathf.Clamp(calcRotation,-maxTurn,maxTurn);
         controllBoid(calcRotation, currentBoidIndex);
     }
 
@@ -63,10 +73,7 @@ public class Boid : MonoBehaviour
         {
             calcRotation += boidTurnCalculation(boid, otherBoid);
         }
-        if (target != null)
-        {
-            calcRotation += seek(boid, target.transform) * targetingWeight;
-        }
+        
     }
 
     float boidTurnCalculation(Transform boid, Transform otherBoid)
@@ -165,5 +172,16 @@ public class Boid : MonoBehaviour
     void controllBoid(float turnDir, int boidNumber)
     {
         boidThrusters[boidNumber].thrust(-turnDir,1,0);
+    }
+
+    public void spawnBoid()
+    {
+        GameObject boid = Instantiate(spawnObject, boidsParent);
+        boid.transform.position = target.trackTarget();
+        boids.Add(boid);
+        ThrusterController tc = boid.GetComponent<ThrusterController>();
+        tc.forwardsThrust = thrusterForce;
+        boidThrusters.Add(tc);
+        Debug.Log("Boids in list: " + boids.Count);
     }
 }
