@@ -41,7 +41,7 @@ public class SpawnOverTime : MonoBehaviour
                 }
                 if(g.GetComponent<EnemyController>() != null)
                 {
-                    g.GetComponent<EnemyController>().target = target;
+                    g.GetComponent<EnemyController>().moveToTarget = target;
                 }
                 if(g.GetComponentInChildren<Turret>() != null)
                 {

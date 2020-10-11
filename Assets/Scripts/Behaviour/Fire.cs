@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
+    public List<Transform> firePoints;
     public GameObject projectile;
     public LayerMask whatIsTarget;
-    private Rigidbody2D rb;
 
-    public virtual GameObject fire()
+    public virtual void fireAll()
+    {
+        
+        foreach(Transform firePoint in firePoints)
+        {
+            fire(firePoint);
+        }
+    }
+
+    public virtual GameObject fire(Transform t)
     {
         GameObject p = Instantiate(projectile);
         p.GetComponent<DealDamage>().whatIsTarget = whatIsTarget;
-        p.transform.position = this.transform.position;
-        p.transform.rotation = this.transform.rotation;
+        p.transform.position = t.position;
+        p.transform.rotation = t.rotation;
         return p;
     }
 }

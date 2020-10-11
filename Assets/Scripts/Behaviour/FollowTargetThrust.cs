@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class FollowTargetThrust : MonoBehaviour
@@ -18,33 +19,8 @@ public class FollowTargetThrust : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        tc.thrust(getTurnDirection(), 1, 0);
-    }
-
-    public float getTurnDirection()
-    {
-        Vector2 direction;
-        if (target != null)
-        {
-             direction = target.trackTarget() - transform.position;
-        }
-        else
-        {
-            direction = transform.up;
-        }
-        float dir = Vector2.SignedAngle(direction, transform.up);
-        if (dir > 0)
-        {
-            return 1;
-        }
-        else if (dir < 0)
-        {
-            return -1;
-        }
-        else
-        {
-            return 0;
-        }
-
+        if (target != null) tc.thrust(VectorTools.getWeightedTurnDirection(target.trackTarget(), transform, 5f), 1, 0);
+        else tc.thrust(0, 1, 0);
+        
     }
 }

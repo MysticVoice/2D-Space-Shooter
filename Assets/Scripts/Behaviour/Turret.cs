@@ -9,8 +9,11 @@ public class Turret : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        dirrection = (target.trackTarget()-transform.position).normalized;
-        transform.up = dirrection;
-
+        if (target == null) this.enabled = false;
+        else
+        {
+            dirrection = (target.trackTarget() - transform.position).normalized;
+            transform.up = dirrection;
+        }
     }
 }

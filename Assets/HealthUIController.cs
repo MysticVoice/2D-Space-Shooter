@@ -7,7 +7,6 @@ public class HealthUIController : MonoBehaviour
 {
     private Image im;
     private RectTransform rt;
-    public Health health;
     public float sizeMultiplier = 200f;
 
     void Start()
@@ -18,7 +17,7 @@ public class HealthUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rt.sizeDelta = new Vector2(health.normalizedHealth()*sizeMultiplier,rt.sizeDelta.y);
+        rt.sizeDelta = new Vector2(GameController.Instance.playerHealth.normalizedHealth()*sizeMultiplier,rt.sizeDelta.y);
     }
 
     

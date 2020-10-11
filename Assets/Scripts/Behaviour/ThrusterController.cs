@@ -26,6 +26,15 @@ public class ThrusterController : MonoBehaviour
         rb.AddTorque(-horizontalInput*rotationForce);
     }
 
+    public void thrustWorldSpace(float horizontalInput, float verticalInput, float strafeInput)
+    {
+        Vector3 thrustDirection = Vector3.zero;
+        thrustDirection += calculateThrust(verticalInput, Vector3.up, forwardsThrust);
+        thrustDirection += calculateThrust(strafeInput, Vector3.right, forwardsThrust);
+        rb.AddForce(thrustDirection);
+        rb.AddTorque(-horizontalInput * rotationForce);
+    }
+
     public Vector3 calculateThrust(float input, Vector3 direction, float force)
     {
         return direction * force * input;

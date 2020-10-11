@@ -29,7 +29,6 @@ public class Explosive : MonoBehaviour
             Health h = c.GetComponentInParent<Health>();
             float trueDamage = (Vector2.Distance(center, c.transform.position)/explosionRadius);
             trueDamage = 1 - trueDamage;
-            Debug.Log(Mathf.CeilToInt(trueDamage * damage));
             h.takeDamage(Mathf.CeilToInt(trueDamage*damage));
         }
     }

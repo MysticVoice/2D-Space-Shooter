@@ -6,7 +6,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     //public Transform target;
-    public Target target;
+    public Target moveToTarget;
+    public Target fireTarget;
     public Vector2 waypoint;
     ThrusterController tc;
     public Fire fire;
@@ -21,6 +22,9 @@ public class EnemyController : MonoBehaviour
     {
         waitFrames = 0;
         tc = GetComponent<ThrusterController>();
+        moveToTarget = GameController.Instance.GetPlayerTarget();
+        fireTarget = moveToTarget;
+        
         pointFinder = GetComponent<FindPointNear>();
     }
 
@@ -31,7 +35,7 @@ public class EnemyController : MonoBehaviour
         tc.thrust(getTurnDirection(),1,0);
         if (waitFrames == 0)
         {
-            if(fire != null) fire.fire();
+            if(fire != null) fire.fireAll();
             setWaitFrames();
         }
         waitFrames--;
@@ -45,13 +49,14 @@ public class EnemyController : MonoBehaviour
     
     public void waypointManagement()
     {
+        
         if(Vector2.Distance(waypoint, new Vector2(transform.position.x, transform.position.y))<pointReachedThreshold)
         {
-            waypoint = pointFinder.findNewPoint(new Vector2(target.trackTarget().x, target.trackTarget().y));
+            waypoint = pointFinder.findNewPoint(new Vector2(moveToTarget.trackTarget().x, moveToTarget.trackTarget().y));
         }
-        if(Vector3.Distance(target.trackTarget(),transform.position)>followDistance)
+        if(Vector3.Distance(moveToTarget.trackTarget(),transform.position)>followDistance)
         {
-            waypoint = new Vector2(target.trackTarget().x, target.trackTarget().y);
+            waypoint = new Vector2(moveToTarget.trackTarget().x, moveToTarget.trackTarget().y);
         }
     }
 
